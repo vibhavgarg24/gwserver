@@ -1,42 +1,54 @@
 package com.ayuvib.gwserver.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ayuvib.gwserver.dao.TestDao;
 import com.ayuvib.gwserver.model.Test;
 
 @Service
 public class TestServiceImpl implements TestService {
 
-    List<Test> list;
+    @Autowired
+    private TestDao testDao;
 
     public TestServiceImpl() {
-        list = new ArrayList<>();
-        list.add(new Test (1, 37));
-        list.add(new Test (2, 209));
     }
 
     @Override
     public List<Test> test() {
         
-        return list;
+        return testDao.findAll();
     }
 
     @Override
     public Test testKey(int testKey) {
         
-        Test ans = null;
+        return testDao.findById(testKey).get();
+    }
 
-        for (Test t: list) {
-            if (t.getKey() == testKey) {
-                ans = t;
-                break;
-            }
-        }
+    @Override
+    public Test add(Test test) {
+        
+        testDao.save(test);
+        return test;
+    }
 
-        return ans;
+    @Override
+    public Test update(Test test) {
+
+        testDao.save(test);
+        return test;
+    }
+
+    @Override
+    public Test delete(int testKey) {
+        
+        Test t = testDao.findById(testKey).get();
+        testDao.delete(t);
+        return t;
     }
     
 }

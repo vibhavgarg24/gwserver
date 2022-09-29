@@ -1,20 +1,9 @@
 package com.ayuvib.gwserver.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class TestDao {
+import com.ayuvib.gwserver.model.Test;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    public int getData() {
-
-        String query = "INSERT INTO public.test(value) VALUES(?);";
-        int update = this.jdbcTemplate.update(query, 5432);
-        return update;
-    }
+public interface TestDao extends JpaRepository<Test, Integer> {
 
 }
