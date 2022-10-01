@@ -11,8 +11,9 @@ public class GwserverApplication implements CommandLineRunner {
 	// private TestDao testDao;
 
 	public static void main(String[] args) {
-		SpringApplication.run(GwserverApplication.class, args);
+		
 		System.out.println("Server started");
+		SpringApplication.run(GwserverApplication.class, args);
 	}
 
 	@Override
