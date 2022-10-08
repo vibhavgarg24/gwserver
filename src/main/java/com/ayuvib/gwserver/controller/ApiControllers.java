@@ -32,17 +32,17 @@ public class ApiControllers {
         return "Welcome to Greyworm!";
     }
 
-    @GetMapping("/test")
-    public List<Test> test() {
-        
-        return testDao.findAll();
-    }
-
     // @GetMapping("/test")
-    // public ResponseEntity<?> test() {
+    // public List<Test> test() {
         
-    //     return this.testService.test();
+    //     return testDao.findAll();
     // }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+        
+        return this.testService.test();
+    }
 
     // @GetMapping("/test/{testKey}")
     // public ResponseEntity<?> testKey(@PathVariable int testKey) {
