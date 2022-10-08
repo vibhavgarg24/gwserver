@@ -1,19 +1,19 @@
 package com.ayuvib.gwserver.service;
 
-import java.util.List;
+import org.springframework.http.ResponseEntity;
 
 import com.ayuvib.gwserver.model.Test;
 
 public interface TestService {
 
-    public List<Test> test();
+    public ResponseEntity<?> test();
 
-    public Test testKey(int testKey);
+    public ResponseEntity<?> testKey(int testKey);
 
-    public Test add(Test test);
+    public ResponseEntity<?> add(Test test);
 
-    public Test update(Test test);
+    public ResponseEntity<?> update(Test test);
 
-    public Test delete(int testKey);
+    public ResponseEntity<?> delete(int testKey);
 
 }

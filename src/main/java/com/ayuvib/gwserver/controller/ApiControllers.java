@@ -1,8 +1,7 @@
 package com.ayuvib.gwserver.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,35 +23,35 @@ public class ApiControllers {
     @GetMapping("/")
     public String welcome() {
 
-        return "Welcome to greyworm!";
+        return "Welcome to Greyworm!";
     }
 
     @GetMapping("/test")
-    public List<Test> test() {
+    public ResponseEntity<?> test() {
         
         return this.testService.test();
     }
 
     @GetMapping("/test/{testKey}")
-    public Test testKey(@PathVariable int testKey) {
+    public ResponseEntity<?> testKey(@PathVariable int testKey) {
 
         return this.testService.testKey(testKey);
     }
 
     @PostMapping("/test")
-    public Test add(@RequestBody Test test) {
+    public ResponseEntity<?> add(@RequestBody Test test) {
 
         return this.testService.add(test);
     }
 
     @PutMapping("/test")
-    public Test update(@RequestBody Test test) {
+    public ResponseEntity<?> update(@RequestBody Test test) {
 
         return this.testService.update(test);
     }
 
     @DeleteMapping("test/{testKey}")
-    public Test delete(@PathVariable int testKey) {
+    public ResponseEntity<?> delete(@PathVariable int testKey) {
 
         return this.testService.delete(testKey);
     }

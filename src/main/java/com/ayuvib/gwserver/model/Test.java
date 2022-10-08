@@ -1,12 +1,10 @@
 package com.ayuvib.gwserver.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
+@Document(collection = "test")
 public class Test {
 
-    @Id
     private int key;
     private int value;
 

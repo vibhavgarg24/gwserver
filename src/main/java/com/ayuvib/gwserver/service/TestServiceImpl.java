@@ -1,8 +1,7 @@
 package com.ayuvib.gwserver.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ayuvib.gwserver.dao.TestDao;
@@ -18,37 +17,37 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public List<Test> test() {
+    public ResponseEntity<?> test() {
         
-        return testDao.findAll();
+        return ResponseEntity.ok(this.testDao.findAll());
     }
 
     @Override
-    public Test testKey(int testKey) {
+    public ResponseEntity<?> testKey(int testKey) {
         
-        return testDao.findById(testKey).get();
+        return ResponseEntity.ok(this.testDao.findById(testKey).get());
     }
 
     @Override
-    public Test add(Test test) {
+    public ResponseEntity<?> add(Test test) {
         
-        testDao.save(test);
-        return test;
+        Test save = this.testDao.save(test);
+        return ResponseEntity.ok(save);
     }
 
     @Override
-    public Test update(Test test) {
+    public ResponseEntity<?> update(Test test) {
 
-        testDao.save(test);
-        return test;
+        Test save = this.testDao.save(test);
+        return ResponseEntity.ok(save);
     }
 
     @Override
-    public Test delete(int testKey) {
+    public ResponseEntity<?> delete(int testKey) {
         
-        Test t = testDao.findById(testKey).get();
-        testDao.delete(t);
-        return t;
+        Test del = this.testDao.findById(testKey).get();
+        this.testDao.delete(del);
+        return ResponseEntity.ok(del);
     }
     
 }
