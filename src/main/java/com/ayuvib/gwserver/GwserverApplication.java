@@ -7,9 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class GwserverApplication implements CommandLineRunner {
 
-	// @Autowired
-	// private TestDao testDao;
-
 	public static void main(String[] args) {
 		
 		System.out.println("Server started");
@@ -18,9 +15,6 @@ public class GwserverApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		
-		// int i = this.testDao.getData();
-		// System.out.println(i);
 
 		System.out.println("Server running");
 	}

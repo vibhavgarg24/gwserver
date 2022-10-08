@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "test")
 public class Test {
 
+    private String id;
     private int key;
     private int value;
 
@@ -14,6 +15,20 @@ public class Test {
     public Test(int key, int value) {
         this.key = key;
         this.value = value;
+    }
+
+    public Test(String id, int key, int value) {
+        this.id = id;
+        this.key = key;
+        this.value = value;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getKey() {
@@ -36,4 +51,5 @@ public class Test {
     public String toString() {
         return "Test [key=" + key + ", value=" + value + "]";
     }
+
 }
