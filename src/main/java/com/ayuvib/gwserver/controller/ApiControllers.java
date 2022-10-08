@@ -32,11 +32,11 @@ public class ApiControllers {
         return this.testService.test();
     }
 
-    @GetMapping("/test/{testKey}")
-    public ResponseEntity<?> testKey(@PathVariable int testKey) {
+    // @GetMapping("/test/{testKey}")
+    // public ResponseEntity<?> testKey(@PathVariable int testKey) {
 
-        return this.testService.testKey(testKey);
-    }
+    //     return this.testService.testKey(testKey);
+    // }
 
     @PostMapping("/test")
     public ResponseEntity<?> add(@RequestBody Test test) {
@@ -50,9 +50,9 @@ public class ApiControllers {
         return this.testService.update(test);
     }
 
-    @DeleteMapping("test/{testKey}")
-    public ResponseEntity<?> delete(@PathVariable int testKey) {
+    // @DeleteMapping("test/{testKey}")
+    // public ResponseEntity<?> delete(@PathVariable int testKey) {
 
-        return this.testService.delete(testKey);
-    }
+    //     return this.testService.delete(testKey);
+    // }
 }

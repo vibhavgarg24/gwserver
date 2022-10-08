@@ -8,12 +8,12 @@ public interface TestService {
 
     public ResponseEntity<?> test();
 
-    public ResponseEntity<?> testKey(int testKey);
+    // public ResponseEntity<?> testKey(int testKey);
 
     public ResponseEntity<?> add(Test test);
 
     public ResponseEntity<?> update(Test test);
 
-    public ResponseEntity<?> delete(int testKey);
+    // public ResponseEntity<?> delete(int testKey);
 
 }

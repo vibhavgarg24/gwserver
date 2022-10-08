@@ -22,11 +22,11 @@ public class TestServiceImpl implements TestService {
         return ResponseEntity.ok(this.testDao.findAll());
     }
 
-    @Override
-    public ResponseEntity<?> testKey(int testKey) {
+    // @Override
+    // public ResponseEntity<?> testKey(int testKey) {
         
-        return ResponseEntity.ok(this.testDao.findById(testKey).get());
-    }
+    //     return ResponseEntity.ok(this.testDao.findById(testKey).get());
+    // }
 
     @Override
     public ResponseEntity<?> add(Test test) {
@@ -42,12 +42,12 @@ public class TestServiceImpl implements TestService {
         return ResponseEntity.ok(save);
     }
 
-    @Override
-    public ResponseEntity<?> delete(int testKey) {
+    // @Override
+    // public ResponseEntity<?> delete(int testKey) {
         
-        Test del = this.testDao.findById(testKey).get();
-        this.testDao.delete(del);
-        return ResponseEntity.ok(del);
-    }
+    //     Test del = this.testDao.findById(testKey).get();
+    //     this.testDao.delete(del);
+    //     return ResponseEntity.ok(del);
+    // }
     
 }
