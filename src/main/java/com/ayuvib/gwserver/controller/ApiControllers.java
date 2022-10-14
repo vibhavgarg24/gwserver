@@ -26,33 +26,51 @@ public class ApiControllers {
         return "Welcome to Greyworm!";
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
+    @GetMapping("/findAll")
+    public ResponseEntity<?> findAll() {
         
-        return this.testService.test();
+        return this.testService.findAll();
     }
 
-    @GetMapping("/test/{testKey}")
-    public ResponseEntity<?> testKey(@PathVariable String testKey) {
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<?> findById(@PathVariable String id) {
 
-        return this.testService.testKey(testKey);
+        return this.testService.findById(id);
     }
 
-    @PostMapping("/test")
+    @PostMapping("/add")
     public ResponseEntity<?> add(@RequestBody Test test) {
 
         return this.testService.add(test);
     }
 
-    @PutMapping("/test")
+    @PutMapping("/update")
     public ResponseEntity<?> update(@RequestBody Test test) {
 
         return this.testService.update(test);
     }
 
-    @DeleteMapping("test/{testKey}")
-    public ResponseEntity<?> delete(@PathVariable String testKey) {
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
 
-        return this.testService.delete(testKey);
+        return this.testService.delete(id);
+    }
+
+    @GetMapping("findByKey/{key}")
+    public ResponseEntity<?> findByKey(@PathVariable int key) {
+
+        return this.testService.findByKey(key);
+    }
+
+    @GetMapping("existsByKey/{key}")
+    public ResponseEntity<?> existsByKey(@PathVariable int key) {
+        
+        return this.testService.existsByKey(key);
+    }
+
+    @GetMapping("getIdByKey/{key}")
+    public ResponseEntity<?> getIdByKey(@PathVariable int key) {
+
+        return this.testService.getIdByKey(key);
     }
 }
