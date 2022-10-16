@@ -6,12 +6,12 @@ import com.ayuvib.gwserver.model.Transaction;
 
 public interface TransactionService {
 
-    public ResponseEntity<?> addTransaction(Transaction txn);
+    public ResponseEntity<?> add(String id, Transaction txn);
 
-    public ResponseEntity<?> getTransactionDetails(String tId);
+    public ResponseEntity<?> find(String id, int tIndex);
 
-    public ResponseEntity<?> updateTransaction(Transaction txn);
+    public ResponseEntity<?> update(String id, int tIndex, Transaction txn);
 
-    public ResponseEntity<?> deleteTransaction(String tId);
+    public ResponseEntity<?> delete(String id, int tIndex);
     
 }

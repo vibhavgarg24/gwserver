@@ -10,7 +10,7 @@ public interface CategoryService {
 
     public ResponseEntity<?> find(String id, String name);
 
-    public ResponseEntity<?> update(String id, int index, Category category);
+    public ResponseEntity<?> update(String id, int cIndex, Category category);
 
-    public ResponseEntity<?> delete(String id, int index);
+    public ResponseEntity<?> delete(String id, int cIndex);
 }

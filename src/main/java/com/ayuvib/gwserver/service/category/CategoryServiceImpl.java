@@ -37,8 +37,6 @@ public class CategoryServiceImpl implements CategoryService {
         return ResponseEntity.ok(save);
     }
 
-
-
     @Override
     public ResponseEntity<?> find(String id, String name) {
         
@@ -53,20 +51,28 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseEntity<?> update(String id, int index, Category category) {
+    public ResponseEntity<?> update(String id, int cIndex, Category category) {
 
         User user = this.userDao.findById(id).get();
-        user.getCategories().set(index, category);
+        if (cIndex < 0 || cIndex >= user.getCategories().size()) {
+            return ResponseEntity.ok(user);
+        }
+
+        user.getCategories().set(cIndex, category);
         
         User save = this.userDao.save(user);
         return ResponseEntity.ok(save);
     }
 
     @Override
-    public ResponseEntity<?> delete(String id, int index) {
+    public ResponseEntity<?> delete(String id, int cIndex) {
         
         User user = this.userDao.findById(id).get();
-        user.getCategories().remove(index);
+        if (cIndex < 0 || cIndex >= user.getCategories().size()) {
+            return ResponseEntity.ok(user);
+        }
+        
+        user.getCategories().remove(cIndex);
         
         User save = this.userDao.save(user);
         return ResponseEntity.ok(save);

@@ -2,7 +2,6 @@ package com.ayuvib.gwserver.model;
 
 public class Transaction {
     
-    private String txnId;
     private double amount;
     private int cIndex;
     private String label;
@@ -10,19 +9,15 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String txnId, double amount, int cIndex, String label) {
-        this.txnId = txnId;
+    public Transaction(double amount, int cIndex) {
+        this.amount = amount;
+        this.cIndex = cIndex;
+    }
+
+    public Transaction(double amount, int cIndex, String label) {
         this.amount = amount;
         this.cIndex = cIndex;
         this.label = label;
-    }
-
-    public String getTxnId() {
-        return txnId;
-    }
-
-    public void setTxnId(String txnId) {
-        this.txnId = txnId;
     }
 
     public double getAmount() {
@@ -51,6 +46,6 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction [amount=" + amount + ", cIndex=" + cIndex + ", label=" + label + ", txnId=" + txnId + "]";
+        return "Transaction [amount=" + amount + ", cIndex=" + cIndex + ", label=" + label + "]";
     }
 }
