@@ -1,4 +1,4 @@
-package com.ayuvib.gwserver.service;
+package com.ayuvib.gwserver.service.test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +46,7 @@ public class TestServiceImpl implements TestService {
     public ResponseEntity<?> delete(String id) {
         
         Test del = this.testDao.findById(id).get();
-        this.testDao.delete(del);
+        this.testDao.deleteById(id);
         return ResponseEntity.ok(del);
     }
 

@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ayuvib.gwserver.model.Test;
-import com.ayuvib.gwserver.service.TestService;
+import com.ayuvib.gwserver.service.test.TestService;
 
 
 @RestController
+@RequestMapping("/test")
 public class ApiControllers {
 
     @Autowired
@@ -50,25 +52,25 @@ public class ApiControllers {
         return this.testService.update(test);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
 
         return this.testService.delete(id);
     }
 
-    @GetMapping("findByKey/{key}")
+    @GetMapping("/findByKey/{key}")
     public ResponseEntity<?> findByKey(@PathVariable int key) {
 
         return this.testService.findByKey(key);
     }
 
-    @GetMapping("existsByKey/{key}")
+    @GetMapping("/existsByKey/{key}")
     public ResponseEntity<?> existsByKey(@PathVariable int key) {
         
         return this.testService.existsByKey(key);
     }
 
-    @GetMapping("getIdByKey/{key}")
+    @GetMapping("/getIdByKey/{key}")
     public ResponseEntity<?> getIdByKey(@PathVariable int key) {
 
         return this.testService.getIdByKey(key);

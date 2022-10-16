@@ -1,4 +1,4 @@
-package com.ayuvib.gwserver.service;
+package com.ayuvib.gwserver.service.test;
 
 import org.springframework.http.ResponseEntity;
 
