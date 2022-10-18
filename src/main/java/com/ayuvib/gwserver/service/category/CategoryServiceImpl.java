@@ -24,6 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
             return ResponseEntity.ok(user);
         }
 
+        // duplicate category name
         List<Category> list = user.getCategories();
         for (Category cat: list) {
             if (cat.getName().trim().toLowerCase().equals(name.trim().toLowerCase())) {

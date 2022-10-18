@@ -10,7 +10,6 @@ public class User {
     private String id;
     private String email;
     private List<Category> categories;
-    private List<Transaction> transactions;
     private double totalSum;
 
     public User() {
@@ -19,15 +18,13 @@ public class User {
     public User(String email) {
         this.email = email;
         categories = new ArrayList<>();
-        transactions = new ArrayList<>();
         totalSum = 0;
     }
 
-    public User(String id, String email, List<Category> categories, List<Transaction> transactions, double totalSum) {
+    public User(String id, String email, List<Category> categories, double totalSum) {
         this.id = id;
         this.email = email;
         this.categories = categories;
-        this.transactions = transactions;
         this.totalSum = totalSum;
     }
 
@@ -55,14 +52,6 @@ public class User {
         this.categories = categories;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
     public double getTotalSum() {
         return totalSum;
     }
@@ -73,7 +62,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", email=" + email + ", categories=" + categories + ", transactions=" + transactions
-                + ", totalSum=" + totalSum + "]";
-    }   
+        return "User [id=" + id + ", email=" + email + ", categories=" + categories + ", totalSum=" + totalSum + "]";
+    }
+      
 }

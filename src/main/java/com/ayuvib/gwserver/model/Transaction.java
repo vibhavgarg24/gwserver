@@ -3,20 +3,15 @@ package com.ayuvib.gwserver.model;
 public class Transaction {
     
     private double amount;
-    private int cIndex;
+    private long timestamp;
     private String label;
 
     public Transaction() {
     }
 
-    public Transaction(double amount, int cIndex) {
+    public Transaction(double amount, long timestamp, String label) {
         this.amount = amount;
-        this.cIndex = cIndex;
-    }
-
-    public Transaction(double amount, int cIndex, String label) {
-        this.amount = amount;
-        this.cIndex = cIndex;
+        this.timestamp = timestamp;
         this.label = label;
     }
 
@@ -28,12 +23,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public int getcIndex() {
-        return cIndex;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setcIndex(int cIndex) {
-        this.cIndex = cIndex;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getLabel() {
@@ -46,6 +41,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Transaction [amount=" + amount + ", cIndex=" + cIndex + ", label=" + label + "]";
+        return "Transaction [amount=" + amount + ", timestamp=" + timestamp + ", label=" + label + "]";
     }
+    
 }
