@@ -1,10 +1,10 @@
 package com.ayuvib.gwserver.service.transaction;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ayuvib.gwserver.dao.UserDao;
+import com.ayuvib.gwserver.exception.InvalidInputException;
 import com.ayuvib.gwserver.model.Transaction;
 import com.ayuvib.gwserver.model.User;
 
@@ -15,11 +15,11 @@ public class TransactionServiceImpl implements TransactionService {
     private UserDao userDao;
 
     @Override
-    public ResponseEntity<?> add(String id, int cIndex, Transaction txn) {
+    public Transaction add(String id, int cIndex, Transaction txn) {
         
         User user = this.userDao.findById(id).get();
         if (txn.getAmount() < 0 || cIndex < 0 || cIndex >= user.getCategories().size()) {
-            return ResponseEntity.ok(user);
+            throw new InvalidInputException("103", "Invalid inputs");
         }
 
         // add txn amount to total sum and corresponding category sum
@@ -29,39 +29,43 @@ public class TransactionServiceImpl implements TransactionService {
 
         user.getCategories().get(cIndex).getTxns().add(txn);
 
-        User save = this.userDao.save(user);
-        return ResponseEntity.ok(save);
+        this.userDao.save(user);
+        return txn;
     }
 
     @Override
-    public ResponseEntity<?> find(String id, int cIndex, int tIndex) {
+    public Transaction find(String id, int cIndex, int tIndex) {
         
         User user = this.userDao.findById(id).get();
         if (cIndex < 0 || cIndex >= user.getCategories().size() || 
             tIndex < 0 || tIndex >= user.getCategories().get(cIndex).getTxns().size()) {
-            return ResponseEntity.ok(null);
+                throw new InvalidInputException("103", "Invalid inputs");
         }
 
-        return ResponseEntity.ok(user.getCategories().get(cIndex).getTxns().get(tIndex));
+        return user.getCategories().get(cIndex).getTxns().get(tIndex);
     }
 
     @Override
-    public ResponseEntity<?> update(String id, int oldCIndex, int oldTIndex, int newCIndex, Transaction txn) {
+    public Transaction update(String id, int oldCIndex, int oldTIndex, int newCIndex, Transaction txn) {
 
-        delete(id, oldCIndex, oldTIndex);
-        add(id, newCIndex, txn);
+        Transaction deletedTxn = delete(id, oldCIndex, oldTIndex);
+        try {
+            add(id, newCIndex, txn);
+        } catch (Exception e) {
+            add(id, oldCIndex, deletedTxn);
+            throw e;
+        }
         
-        User user = this.userDao.findById(id).get();
-        return ResponseEntity.ok(user);
+        return txn;
     }
 
     @Override
-    public ResponseEntity<?> delete(String id, int cIndex, int tIndex) {
+    public Transaction delete(String id, int cIndex, int tIndex) {
         
         User user = this.userDao.findById(id).get();
         if (cIndex < 0 || cIndex >= user.getCategories().size() || 
             tIndex < 0 || tIndex >= user.getCategories().get(cIndex).getTxns().size()) {
-            return ResponseEntity.ok(user);
+                throw new InvalidInputException("103", "Invalid inputs");
         }
 
         // get txn from cIndex tIndex
@@ -72,10 +76,10 @@ public class TransactionServiceImpl implements TransactionService {
         user.setTotalSum(user.getTotalSum() - txnAmount);
         user.getCategories().get(cIndex).setSum(cSum - txnAmount);
 
-        user.getCategories().get(cIndex).getTxns().remove(tIndex);
+        Transaction deletedTxn = user.getCategories().get(cIndex).getTxns().remove(tIndex);
 
-        User save = this.userDao.save(user);
-        return ResponseEntity.ok(save);
+        this.userDao.save(user);
+        return deletedTxn;
     }
     
 }

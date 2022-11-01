@@ -1,6 +1,9 @@
 package com.ayuvib.gwserver.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,33 +24,38 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/findAll")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<List<User>> findAll() {
         
-        return this.userService.findAll();
+        List<User> list = this.userService.findAll();
+        return new ResponseEntity<List<User>>(list, HttpStatus.OK);
     }
 
     @GetMapping("/findById/{id}")
-    public ResponseEntity<?> findById(@PathVariable String id) {
+    public ResponseEntity<User> findById(@PathVariable String id) {
 
-        return this.userService.findById(id);
+        User user = this.userService.findById(id);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     // Used for adding new User as well
     @GetMapping("/getId/{email}")
-    public ResponseEntity<?> getId(@PathVariable String email) {
+    public ResponseEntity<String> getId(@PathVariable String email) {
 
-        return this.userService.getId(email);
+        String id =  this.userService.getId(email);
+        return new ResponseEntity<String>(id, HttpStatus.OK);
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> update(@RequestBody User user) {
+    public ResponseEntity<User> update(@RequestBody User user) {
 
-        return this.userService.update(user);
+        User updatedUser = this.userService.update(user);
+        return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable String id) {
+    public ResponseEntity<User> delete(@PathVariable String id) {
 
-        return this.userService.delete(id);
+        User deletedUser = this.userService.delete(id);
+        return new ResponseEntity<User>(deletedUser, HttpStatus.OK);
     }
 }

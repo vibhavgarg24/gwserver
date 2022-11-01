@@ -1,6 +1,7 @@
 package com.ayuvib.gwserver.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,28 +27,32 @@ public class TransactionController {
     }
 
     @PostMapping("/add/{userId}/{cIndex}")
-    public ResponseEntity<?> add(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Transaction txn){
+    public ResponseEntity<Transaction> add(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Transaction txn){
 
-        return this.transactionService.add(userId, cIndex, txn);
+        Transaction addedTxn = this.transactionService.add(userId, cIndex, txn);
+        return new ResponseEntity<Transaction>(addedTxn, HttpStatus.OK);
     }
 
     @GetMapping("/find/{userId}/{cIndex}/{tIndex}")
-    public ResponseEntity<?> find(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex){
+    public ResponseEntity<Transaction> find(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex){
 
-        return this.transactionService.find(userId, cIndex, tIndex);
+        Transaction txn = this.transactionService.find(userId, cIndex, tIndex);
+        return new ResponseEntity<Transaction>(txn, HttpStatus.OK);
     }
 
     @PutMapping("/update/{userId}/{oldCIndex}/{oldTIndex}/{newCIndex}")
-    public ResponseEntity<?> update(@PathVariable String userId, @PathVariable int oldCIndex, 
+    public ResponseEntity<Transaction> update(@PathVariable String userId, @PathVariable int oldCIndex, 
                                     @PathVariable int oldTIndex, @PathVariable int newCIndex, @RequestBody Transaction txn) {
         
-        return this.transactionService.update(userId, oldCIndex, oldTIndex, newCIndex, txn);
+        Transaction updatedTxn = this.transactionService.update(userId, oldCIndex, oldTIndex, newCIndex, txn);
+        return new ResponseEntity<Transaction>(updatedTxn, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{userId}/{cIndex}/{tIndex}")
-    public ResponseEntity<?> delete(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex){
-
-        return this.transactionService.delete(userId, cIndex, tIndex);
+    public ResponseEntity<Transaction> delete(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex){
+        
+        Transaction deletedTxn = this.transactionService.delete(userId, cIndex, tIndex);
+        return new ResponseEntity<Transaction>(deletedTxn, HttpStatus.OK);
     }
     
 }

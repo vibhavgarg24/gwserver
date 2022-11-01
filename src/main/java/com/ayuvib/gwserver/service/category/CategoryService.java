@@ -1,16 +1,14 @@
 package com.ayuvib.gwserver.service.category;
 
-import org.springframework.http.ResponseEntity;
-
 import com.ayuvib.gwserver.model.Category;
 
 public interface CategoryService {
 
-    public ResponseEntity<?> add(String id, String name);
+    public Category add(String id, Category category);
 
-    public ResponseEntity<?> find(String id, String name);
+    public Category find(String id, String name);
 
-    public ResponseEntity<?> update(String id, int cIndex, Category category);
+    public Category update(String id, int cIndex, Category category);
 
-    public ResponseEntity<?> delete(String id, int cIndex);
+    public Category delete(String id, int cIndex);
 }

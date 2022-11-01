@@ -1,18 +1,18 @@
 package com.ayuvib.gwserver.service.user;
 
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 
 import com.ayuvib.gwserver.model.User;
 
 public interface UserService {
     
-    public ResponseEntity<?> findAll();
+    public List<User> findAll();
 
-    public ResponseEntity<?> findById(String id);
+    public User findById(String id);
 
-    public ResponseEntity<?> getId(String email);
+    public String getId(String email);
 
-    public ResponseEntity<?> update(User user);
+    public User update(User user);
 
-    public ResponseEntity<?> delete (String id);
+    public User delete (String id);
 }

@@ -3,10 +3,12 @@ package com.ayuvib.gwserver.service.category;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ayuvib.gwserver.dao.UserDao;
+import com.ayuvib.gwserver.exception.DuplicateException;
+import com.ayuvib.gwserver.exception.EmptyException;
+import com.ayuvib.gwserver.exception.InvalidInputException;
 import com.ayuvib.gwserver.model.Category;
 import com.ayuvib.gwserver.model.User;
 
@@ -17,66 +19,68 @@ public class CategoryServiceImpl implements CategoryService {
     private UserDao userDao;
 
     @Override
-    public ResponseEntity<?> add(String id, String name) {
+    public Category add(String id, Category category) {
         
         User user = this.userDao.findById(id).get();
-        if (name.trim().equals("")) {
-            return ResponseEntity.ok(user);
+        if (category.getName().trim().equals("")) {
+            throw new EmptyException("102", "Category name empty");
         }
 
         // duplicate category name
-        List<Category> list = user.getCategories();
-        for (Category cat: list) {
-            if (cat.getName().trim().toLowerCase().equals(name.trim().toLowerCase())) {
-                return ResponseEntity.ok(user);
-            }
+        if (find(id, category.getName().trim().toLowerCase()) != null) {
+            throw new DuplicateException("101", "Duplicate category name");
         }
         
-        list.add(new Category(name));
+        List<Category> list = this.userDao.findById(id).get().getCategories();
+        list.add(category);
         user.setCategories(list);
-        User save = this.userDao.save(user);
-        return ResponseEntity.ok(save);
+        user.setTotalSum(user.getTotalSum() + category.getSum());
+
+        this.userDao.save(user);
+        return category;
     }
 
     @Override
-    public ResponseEntity<?> find(String id, String name) {
+    public Category find(String id, String name) {
         
         List<Category> list = this.userDao.findById(id).get().getCategories();
         for (Category cat: list) {
-            if (cat.getName().equals(name)) {
-                return ResponseEntity.ok(cat);
+            if (cat.getName().toLowerCase().equals(name)) {
+                return cat;
             }
         }
 
-        return ResponseEntity.ok(null);
+        // change to not found exc
+        return null;
     }
 
     @Override
-    public ResponseEntity<?> update(String id, int cIndex, Category category) {
+    public Category update(String id, int cIndex, Category category) {
 
-        User user = this.userDao.findById(id).get();
-        if (cIndex < 0 || cIndex >= user.getCategories().size()) {
-            return ResponseEntity.ok(user);
+        Category deletedCategory = delete(id, cIndex);
+        try {
+            add(id, category);
+        } catch (Exception e) {
+            add(id, deletedCategory);
+            throw e;
         }
 
-        user.getCategories().set(cIndex, category);
-        
-        User save = this.userDao.save(user);
-        return ResponseEntity.ok(save);
+        return category;
     }
 
     @Override
-    public ResponseEntity<?> delete(String id, int cIndex) {
+    public Category delete(String id, int cIndex) {
         
         User user = this.userDao.findById(id).get();
         if (cIndex < 0 || cIndex >= user.getCategories().size()) {
-            return ResponseEntity.ok(user);
+            throw new InvalidInputException("103", "Invalid category index");
         }
         
-        user.getCategories().remove(cIndex);
-        
-        User save = this.userDao.save(user);
-        return ResponseEntity.ok(save);
+        Category category = user.getCategories().remove(cIndex);
+        user.setTotalSum(user.getTotalSum() - category.getSum());
+        this.userDao.save(user);
+
+        return category;
     }
     
 }

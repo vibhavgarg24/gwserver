@@ -1,6 +1,7 @@
 package com.ayuvib.gwserver.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,26 +26,31 @@ public class CategoryController {
     }
 
     @PostMapping("/add/{userId}/{categoryName}")
-    public ResponseEntity<?> add(@PathVariable String userId, @PathVariable String categoryName) {
+    public ResponseEntity<Category> add(@PathVariable String userId, @PathVariable String categoryName) {
 
-        return this.categoryService.add(userId, categoryName);
+        Category category = new Category(categoryName);
+        Category addedCategory = this.categoryService.add(userId, category);
+        return new ResponseEntity<Category>(addedCategory, HttpStatus.OK);
     }
 
     @GetMapping("/find/{userId}/{categoryName}")
-    public ResponseEntity<?> find(@PathVariable String userId, @PathVariable String categoryName) {
+    public ResponseEntity<Category> find(@PathVariable String userId, @PathVariable String categoryName) {
 
-        return this.categoryService.find(userId, categoryName);
+        Category category = this.categoryService.find(userId, categoryName);
+        return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
     @PutMapping("/update/{userId}/{cIndex}")
-    public ResponseEntity<?> update(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Category category) {
+    public ResponseEntity<Category> update(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Category category) {
 
-        return this.categoryService.update(userId, cIndex, category);
+        Category updatedCategory =  this.categoryService.update(userId, cIndex, category);
+        return new ResponseEntity<Category>(updatedCategory, HttpStatus.OK);
     }
     
     @DeleteMapping("/delete/{userId}/{cIndex}")
-    public ResponseEntity<?> delet(@PathVariable String userId, @PathVariable int cIndex) {
+    public ResponseEntity<Category> delete(@PathVariable String userId, @PathVariable int cIndex) {
 
-        return this.categoryService.delete(userId, cIndex);
+        Category deletedCategory =  this.categoryService.delete(userId, cIndex);
+        return new ResponseEntity<Category>(deletedCategory, HttpStatus.OK);
     }
 }
