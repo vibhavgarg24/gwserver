@@ -1,6 +1,7 @@
 package com.ayuvib.gwserver.service.category;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,18 +27,19 @@ public class CategoryServiceImpl implements CategoryService {
             throw new EmptyException("102", "Category name empty");
         }
 
-        // duplicate category name
-        if (find(id, category.getName().trim().toLowerCase()) != null) {
-            throw new DuplicateException("101", "Duplicate category name");
-        }
-        
-        List<Category> list = this.userDao.findById(id).get().getCategories();
-        list.add(category);
-        user.setCategories(list);
-        user.setTotalSum(user.getTotalSum() + category.getSum());
+        try {
+            find(id, category.getName().trim().toLowerCase());
+        } catch (Exception e) {
+            List<Category> list = this.userDao.findById(id).get().getCategories();
+            list.add(category);
+            user.setCategories(list);
+            user.setTotalSum(user.getTotalSum() + category.getSum());
 
-        this.userDao.save(user);
-        return category;
+            this.userDao.save(user);
+            return category;
+        }
+
+        throw new DuplicateException("101", "Duplicate category name");
     }
 
     @Override
@@ -49,9 +51,8 @@ public class CategoryServiceImpl implements CategoryService {
                 return cat;
             }
         }
-
-        // change to not found exc
-        return null;
+        
+        throw new NoSuchElementException();
     }
 
     @Override
