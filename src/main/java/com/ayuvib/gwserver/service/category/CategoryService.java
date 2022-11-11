@@ -6,7 +6,9 @@ public interface CategoryService {
 
     public Category add(String id, Category category);
 
-    public Category find(String id, String name);
+    public Category findByName(String id, String name);
+
+    public Category findByIndex(String id, int index);
 
     public Category update(String id, int cIndex, Category category);
 

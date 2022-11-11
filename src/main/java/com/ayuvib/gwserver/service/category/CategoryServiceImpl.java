@@ -28,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         try {
-            find(id, category.getName().trim().toLowerCase());
+            findByName(id, category.getName().trim().toLowerCase());
         } catch (Exception e) {
             List<Category> list = this.userDao.findById(id).get().getCategories();
             list.add(category);
@@ -43,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category find(String id, String name) {
+    public Category findByName(String id, String name) {
         
         List<Category> list = this.userDao.findById(id).get().getCategories();
         for (Category cat: list) {
@@ -53,6 +53,18 @@ public class CategoryServiceImpl implements CategoryService {
         }
         
         throw new NoSuchElementException();
+    }
+
+    @Override
+    public Category findByIndex(String id, int index) {
+
+        List<Category> list = this.userDao.findById(id).get().getCategories();
+
+        if(index < 0 || index >= list.size()){
+            throw new InvalidInputException("103", "Invalid category index");
+        }
+
+        return list.get(index);
     }
 
     @Override

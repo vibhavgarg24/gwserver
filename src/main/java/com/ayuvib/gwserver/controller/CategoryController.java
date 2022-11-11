@@ -33,10 +33,17 @@ public class CategoryController {
         return new ResponseEntity<Category>(addedCategory, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{userId}/{categoryName}")
-    public ResponseEntity<Category> find(@PathVariable String userId, @PathVariable String categoryName) {
+    @GetMapping("/findByName/{userId}/{categoryName}")
+    public ResponseEntity<Category> findByName(@PathVariable String userId, @PathVariable String categoryName) {
 
-        Category category = this.categoryService.find(userId, categoryName);
+        Category category = this.categoryService.findByName(userId, categoryName);
+        return new ResponseEntity<Category>(category, HttpStatus.OK);
+    }
+
+    @GetMapping("/findByIndex/{userId}/{categoryIndex}")
+    public ResponseEntity<Category> findByIndex(@PathVariable String userId, @PathVariable int categoryIndex) {
+
+        Category category = this.categoryService.findByIndex(userId, categoryIndex);
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
