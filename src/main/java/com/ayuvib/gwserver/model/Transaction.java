@@ -1,27 +1,59 @@
 package com.ayuvib.gwserver.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "txn")
 public class Transaction {
     
+    private String id;
+    private String catId;
+    private String userId;
     private double amount;
     private long timestamp;
     private String label;
-    private Category category;
 
     public Transaction() {
     }
 
-    public Transaction(double amount, long timestamp, String label) {
+    public Transaction(String catId, String userId, double amount, long timestamp, String label) {
+        this.catId = catId;
+        this.userId = userId;
         this.amount = amount;
         this.timestamp = timestamp;
         this.label = label;
-        this.category = null;
     }
 
-    public Transaction(double amount, long timestamp, String label, Category category) {
+    public Transaction(String id, String catId, String userId, double amount, long timestamp, String label) {
+        this.id = id;
+        this.catId = catId;
+        this.userId = userId;
         this.amount = amount;
         this.timestamp = timestamp;
         this.label = label;
-        this.category = category;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCatId() {
+        return catId;
+    }
+
+    public void setCatId(String catId) {
+        this.catId = catId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public double getAmount() {
@@ -48,18 +80,10 @@ public class Transaction {
         this.label = label;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
     @Override
     public String toString() {
-        return "Transaction [amount=" + amount + ", timestamp=" + timestamp + ", label=" + label + ", category="
-                + category + "]";
+        return "Transaction [id=" + id + ", catId=" + catId + ", userId=" + userId + ", amount=" + amount
+                + ", timestamp=" + timestamp + ", label=" + label + "]";
     }
 
 }

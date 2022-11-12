@@ -1,16 +1,18 @@
 package com.ayuvib.gwserver.service.category;
 
+import java.util.List;
+
 import com.ayuvib.gwserver.model.Category;
 
 public interface CategoryService {
 
-    public Category add(String id, Category category);
+    public Category add(String userId, String categoryName);
 
-    public Category findByName(String id, String name);
+    public List<Category> findByUserId(String userId);
 
-    public Category findByIndex(String id, int index);
+    public Category findById(String catId);
 
-    public Category update(String id, int cIndex, Category category);
+    public Category update(Category category);
 
-    public Category delete(String id, int cIndex);
+    public Category delete(String catId);
 }

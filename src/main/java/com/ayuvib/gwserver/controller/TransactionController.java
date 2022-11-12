@@ -28,39 +28,45 @@ public class TransactionController {
     public TransactionController() {
     }
 
-    @PostMapping("/add/{userId}/{cIndex}")
-    public ResponseEntity<Transaction> add(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Transaction txn) {
+    @PostMapping("/add")
+    public ResponseEntity<Transaction> add(@RequestBody Transaction txn) {
 
-        Transaction addedTxn = this.transactionService.add(userId, cIndex, txn);
+        Transaction addedTxn = this.transactionService.add(txn);
         return new ResponseEntity<Transaction>(addedTxn, HttpStatus.OK);
     }
 
-    @GetMapping("/findAll/{userId}")
-    public ResponseEntity<List<Transaction>> findAll(@PathVariable String userId) {
+    @GetMapping("/findById/{txnId}")
+    public ResponseEntity<Transaction> findById(@PathVariable String txnId) {
 
-        List<Transaction> list = this.transactionService.findAll(userId);
+        Transaction txn = this.transactionService.findById(txnId);
+        return new ResponseEntity<Transaction>(txn, HttpStatus.OK);
+    }
+
+    @GetMapping("/findByUserId/{userId}")
+    public ResponseEntity<List<Transaction>> findByUserId(@PathVariable String userId) {
+
+        List<Transaction> list = this.transactionService.findByUserId(userId);
         return new ResponseEntity<List<Transaction>>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/find/{userId}/{cIndex}/{tIndex}")
-    public ResponseEntity<Transaction> find(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex) {
+    @GetMapping("/findByCatId/{catId}")
+    public ResponseEntity<List<Transaction>> findByCatId(@PathVariable String catId) {
 
-        Transaction txn = this.transactionService.find(userId, cIndex, tIndex);
-        return new ResponseEntity<Transaction>(txn, HttpStatus.OK);
+        List<Transaction> list = this.transactionService.findByCatId(catId);
+        return new ResponseEntity<List<Transaction>>(list, HttpStatus.OK);
     }
     
-    @PutMapping("/update/{userId}/{oldCIndex}/{oldTIndex}/{newCIndex}")
-    public ResponseEntity<Transaction> update(@PathVariable String userId, @PathVariable int oldCIndex, 
-                                    @PathVariable int oldTIndex, @PathVariable int newCIndex, @RequestBody Transaction txn) {
+    @PutMapping("/update")
+    public ResponseEntity<Transaction> update(@RequestBody Transaction txn) {
         
-        Transaction updatedTxn = this.transactionService.update(userId, oldCIndex, oldTIndex, newCIndex, txn);
+        Transaction updatedTxn = this.transactionService.update(txn);
         return new ResponseEntity<Transaction>(updatedTxn, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{userId}/{cIndex}/{tIndex}")
-    public ResponseEntity<Transaction> delete(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex) {
+    @DeleteMapping("/delete/{txnId}")
+    public ResponseEntity<Transaction> delete(@PathVariable String txnId) {
         
-        Transaction deletedTxn = this.transactionService.delete(userId, cIndex, tIndex);
+        Transaction deletedTxn = this.transactionService.delete(txnId);
         return new ResponseEntity<Transaction>(deletedTxn, HttpStatus.OK);
     }
     

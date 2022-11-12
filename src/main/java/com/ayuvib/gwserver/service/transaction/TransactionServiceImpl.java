@@ -1,11 +1,12 @@
 package com.ayuvib.gwserver.service.transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ayuvib.gwserver.dao.CategoryDao;
+import com.ayuvib.gwserver.dao.TxnDao;
 import com.ayuvib.gwserver.dao.UserDao;
 import com.ayuvib.gwserver.exception.InvalidInputException;
 import com.ayuvib.gwserver.model.Category;
@@ -16,64 +17,64 @@ import com.ayuvib.gwserver.model.User;
 public class TransactionServiceImpl implements TransactionService {
 
     @Autowired
+    private TxnDao txnDao;
+
+    @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private CategoryDao categoryDao;
+
     @Override
-    public Transaction add(String id, int cIndex, Transaction txn) {
+    public Transaction add(Transaction txn) {
         
-        User user = this.userDao.findById(id).get();
-        if (txn.getAmount() < 0 || cIndex < 0 || cIndex >= user.getCategories().size()) {
+        if (txn.getAmount() < 0) {
             throw new InvalidInputException("103", "Invalid inputs");
         }
 
-        // add txn amount to total sum and corresponding category sum
-        user.setTotalSum(user.getTotalSum() + txn.getAmount());
-        double sum = user.getCategories().get(cIndex).getSum() + txn.getAmount();
-        user.getCategories().get(cIndex).setSum(sum);
+        double amount = txn.getAmount();
 
-        user.getCategories().get(cIndex).getTxns().add(txn);
-
+        // add amount to user total
+        User user = this.userDao.findById(txn.getUserId()).get();
+        user.setTotalSum(user.getTotalSum() + amount);
         this.userDao.save(user);
-        return txn;
+
+        // add amount to category total
+        Category category = this.categoryDao.findById(txn.getCatId()).get();
+        category.setSum(category.getSum() + amount);
+        this.categoryDao.save(category);
+
+        // add txn to db
+        Transaction save = this.txnDao.save(txn);
+        return save;
     }
 
     @Override
-    public List<Transaction> findAll(String id) {
+    public Transaction findById(String txnId) {
 
-        User user = this.userDao.findById(id).get();
-        List<Transaction> list = new ArrayList<>();
-        
-        for (Category category: user.getCategories()) {
-            Category temp = new Category(category);
-            for (Transaction txn : category.getTxns()) {
-                txn.setCategory(temp);
-                list.add(txn);
-            }
-        }
-
-        return list;
+        return this.txnDao.findById(txnId).get();
     }
 
     @Override
-    public Transaction find(String id, int cIndex, int tIndex) {
-        
-        User user = this.userDao.findById(id).get();
-        if (cIndex < 0 || cIndex >= user.getCategories().size() || 
-            tIndex < 0 || tIndex >= user.getCategories().get(cIndex).getTxns().size()) {
-                throw new InvalidInputException("103", "Invalid inputs");
-        }
+    public List<Transaction> findByUserId(String userId) {
 
-        return user.getCategories().get(cIndex).getTxns().get(tIndex);
+        return this.txnDao.findByUserId(userId);
     }
 
     @Override
-    public Transaction update(String id, int oldCIndex, int oldTIndex, int newCIndex, Transaction txn) {
+    public List<Transaction> findByCatId(String catId) {
 
-        Transaction deletedTxn = delete(id, oldCIndex, oldTIndex);
+        return this.txnDao.findByCatId(catId);
+    }
+
+    @Override
+    public Transaction update(Transaction txn) {
+
+        Transaction deletedTxn = delete(txn.getId());
         try {
-            add(id, newCIndex, txn);
+            add(txn);
         } catch (Exception e) {
-            add(id, oldCIndex, deletedTxn);
+            add(deletedTxn);
             throw e;
         }
         
@@ -81,26 +82,25 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public Transaction delete(String id, int cIndex, int tIndex) {
+    public Transaction delete(String txnId) {
         
-        User user = this.userDao.findById(id).get();
-        if (cIndex < 0 || cIndex >= user.getCategories().size() || 
-            tIndex < 0 || tIndex >= user.getCategories().get(cIndex).getTxns().size()) {
-                throw new InvalidInputException("103", "Invalid inputs");
-        }
+        Transaction txn = findById(txnId);
 
-        // get txn from cIndex tIndex
-        double txnAmount = user.getCategories().get(cIndex).getTxns().get(tIndex).getAmount();
-        double cSum = user.getCategories().get(cIndex).getSum();
+        double amount = txn.getAmount();
 
-        // set total sum and corresponding category sum
-        user.setTotalSum(user.getTotalSum() - txnAmount);
-        user.getCategories().get(cIndex).setSum(cSum - txnAmount);
-
-        Transaction deletedTxn = user.getCategories().get(cIndex).getTxns().remove(tIndex);
-
+        // sub amount from user total
+        User user = this.userDao.findById(txn.getUserId()).get();
+        user.setTotalSum(user.getTotalSum() - amount);
         this.userDao.save(user);
-        return deletedTxn;
+
+        // sub amount from category total
+        Category category = this.categoryDao.findById(txn.getCatId()).get();
+        category.setSum(category.getSum() - amount);
+        this.categoryDao.save(category);
+
+        // delete txn from db
+        this.txnDao.deleteById(txnId);
+        return txn;
     }
     
 }

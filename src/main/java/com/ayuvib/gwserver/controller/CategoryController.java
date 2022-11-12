@@ -1,5 +1,7 @@
 package com.ayuvib.gwserver.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,36 +30,35 @@ public class CategoryController {
     @PostMapping("/add/{userId}/{categoryName}")
     public ResponseEntity<Category> add(@PathVariable String userId, @PathVariable String categoryName) {
 
-        Category category = new Category(categoryName);
-        Category addedCategory = this.categoryService.add(userId, category);
+        Category addedCategory = this.categoryService.add(userId, categoryName);
         return new ResponseEntity<Category>(addedCategory, HttpStatus.OK);
     }
 
-    @GetMapping("/findByName/{userId}/{categoryName}")
-    public ResponseEntity<Category> findByName(@PathVariable String userId, @PathVariable String categoryName) {
+    @GetMapping("/findByUserId/{userId}")
+    public ResponseEntity<List<Category>> findByUserId(@PathVariable String userId) {
 
-        Category category = this.categoryService.findByName(userId, categoryName);
+        List<Category> list = this.categoryService.findByUserId(userId);
+        return new ResponseEntity<List<Category>>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/findById/{catId}")
+    public ResponseEntity<Category> findById(@PathVariable String catId) {
+
+        Category category = this.categoryService.findById(catId);
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
-    @GetMapping("/findByIndex/{userId}/{categoryIndex}")
-    public ResponseEntity<Category> findByIndex(@PathVariable String userId, @PathVariable int categoryIndex) {
+    @PutMapping("/update")
+    public ResponseEntity<Category> update(@RequestBody Category category) {
 
-        Category category = this.categoryService.findByIndex(userId, categoryIndex);
-        return new ResponseEntity<Category>(category, HttpStatus.OK);
-    }
-
-    @PutMapping("/update/{userId}/{cIndex}")
-    public ResponseEntity<Category> update(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Category category) {
-
-        Category updatedCategory =  this.categoryService.update(userId, cIndex, category);
+        Category updatedCategory =  this.categoryService.update(category);
         return new ResponseEntity<Category>(updatedCategory, HttpStatus.OK);
     }
     
-    @DeleteMapping("/delete/{userId}/{cIndex}")
-    public ResponseEntity<Category> delete(@PathVariable String userId, @PathVariable int cIndex) {
+    @DeleteMapping("/delete/{catId}")
+    public ResponseEntity<Category> delete(@PathVariable String catId) {
 
-        Category deletedCategory =  this.categoryService.delete(userId, cIndex);
+        Category deletedCategory =  this.categoryService.delete(catId);
         return new ResponseEntity<Category>(deletedCategory, HttpStatus.OK);
     }
 }

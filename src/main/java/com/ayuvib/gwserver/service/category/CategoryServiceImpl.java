@@ -1,15 +1,15 @@
 package com.ayuvib.gwserver.service.category;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ayuvib.gwserver.dao.CategoryDao;
+import com.ayuvib.gwserver.dao.TxnDao;
 import com.ayuvib.gwserver.dao.UserDao;
 import com.ayuvib.gwserver.exception.DuplicateException;
 import com.ayuvib.gwserver.exception.EmptyException;
-import com.ayuvib.gwserver.exception.InvalidInputException;
 import com.ayuvib.gwserver.model.Category;
 import com.ayuvib.gwserver.model.User;
 
@@ -17,83 +17,64 @@ import com.ayuvib.gwserver.model.User;
 public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
+    private CategoryDao categoryDao;
+
+    @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private TxnDao txnDao;
+
     @Override
-    public Category add(String id, Category category) {
+    public Category add(String userId, String categoryName) {
         
-        User user = this.userDao.findById(id).get();
-        if (category.getName().trim().equals("")) {
+        if (categoryName.trim().equals("")) {
             throw new EmptyException("102", "Category name empty");
         }
 
-        try {
-            findByName(id, category.getName().trim().toLowerCase());
-        } catch (Exception e) {
-            List<Category> list = this.userDao.findById(id).get().getCategories();
-            list.add(category);
-            user.setCategories(list);
-            user.setTotalSum(user.getTotalSum() + category.getSum());
-
-            this.userDao.save(user);
-            return category;
+        if (this.categoryDao.existsByUserIdAndName(userId, categoryName)) {
+            throw new DuplicateException("101", "Duplicate category name");
         }
 
-        throw new DuplicateException("101", "Duplicate category name");
+        Category category = new Category(userId, categoryName);
+        Category save = this.categoryDao.save(category);
+        return save;
     }
 
     @Override
-    public Category findByName(String id, String name) {
-        
-        List<Category> list = this.userDao.findById(id).get().getCategories();
-        for (Category cat: list) {
-            if (cat.getName().toLowerCase().equals(name)) {
-                return cat;
-            }
-        }
-        
-        throw new NoSuchElementException();
+    public List<Category> findByUserId(String userId) {
+
+        return this.categoryDao.findByUserId(userId);
     }
 
     @Override
-    public Category findByIndex(String id, int index) {
+    public Category findById(String catId) {
 
-        List<Category> list = this.userDao.findById(id).get().getCategories();
-
-        if(index < 0 || index >= list.size()){
-            throw new InvalidInputException("103", "Invalid category index");
-        }
-
-        return list.get(index);
+        return this.categoryDao.findById(catId).get();
     }
 
     @Override
-    public Category update(String id, int cIndex, Category category) {
+    public Category update(Category category) {
 
-        Category deletedCategory = delete(id, cIndex);
-        try {
-            add(id, category);
-        } catch (Exception e) {
-            add(id, deletedCategory);
-            throw e;
-        }
-
-        return category;
+        Category save = this.categoryDao.save(category);
+        return save;
     }
 
     @Override
-    public Category delete(String id, int cIndex) {
-        
-        User user = this.userDao.findById(id).get();
-        if (cIndex < 0 || cIndex >= user.getCategories().size()) {
-            throw new InvalidInputException("103", "Invalid category index");
-        }
-        
-        Category category = user.getCategories().remove(cIndex);
-        user.setTotalSum(user.getTotalSum() - category.getSum());
+    public Category delete(String catId) {
+
+        // delete all txns of this category
+        this.txnDao.deleteAllByCatId(catId);
+
+        Category del = findById(catId);
+
+        // sub cat sum from user total
+        User user = this.userDao.findById(del.getUserId()).get();
+        user.setTotalSum(user.getTotalSum() - del.getSum());
         this.userDao.save(user);
-
-        return category;
+        
+        this.categoryDao.deleteById(catId);
+        return del;
     }
     
 }

@@ -1,27 +1,45 @@
 package com.ayuvib.gwserver.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "category")
 public class Category {
     
+    private String id;
+    private String userId;
     private String name;
     private double sum;
-    private List<Transaction> txns;
 
     public Category() {
     }
 
-    public Category(String name) {
+    public Category(String userId, String name) {
+        this.userId = userId;
         this.name = name;
         this.sum = 0;
-        this.txns = new ArrayList<>();
     }
 
-    public Category(Category copy) {
-        this.name = copy.name;
-        this.sum = copy.sum;
-        this.setTxns(null);
+    public Category(String id, String userId, String name, double sum) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.sum = sum;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -40,17 +58,9 @@ public class Category {
         this.sum = sum;
     }
 
-    public List<Transaction> getTxns() {
-        return txns;
-    }
-
-    public void setTxns(List<Transaction> txns) {
-        this.txns = txns;
-    }
-
     @Override
     public String toString() {
-        return "Category [name=" + name + ", sum=" + sum + ", txns=" + txns + "]";
+        return "Category [id=" + id + ", userId=" + userId + ", name=" + name + ", sum=" + sum + "]";
     }
 
 }
