@@ -1,5 +1,7 @@
 package com.ayuvib.gwserver.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,19 +29,26 @@ public class TransactionController {
     }
 
     @PostMapping("/add/{userId}/{cIndex}")
-    public ResponseEntity<Transaction> add(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Transaction txn){
+    public ResponseEntity<Transaction> add(@PathVariable String userId, @PathVariable int cIndex, @RequestBody Transaction txn) {
 
         Transaction addedTxn = this.transactionService.add(userId, cIndex, txn);
         return new ResponseEntity<Transaction>(addedTxn, HttpStatus.OK);
     }
 
+    @GetMapping("/findAll/{userId}")
+    public ResponseEntity<List<Transaction>> findAll(@PathVariable String userId) {
+
+        List<Transaction> list = this.transactionService.findAll(userId);
+        return new ResponseEntity<List<Transaction>>(list, HttpStatus.OK);
+    }
+
     @GetMapping("/find/{userId}/{cIndex}/{tIndex}")
-    public ResponseEntity<Transaction> find(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex){
+    public ResponseEntity<Transaction> find(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex) {
 
         Transaction txn = this.transactionService.find(userId, cIndex, tIndex);
         return new ResponseEntity<Transaction>(txn, HttpStatus.OK);
     }
-
+    
     @PutMapping("/update/{userId}/{oldCIndex}/{oldTIndex}/{newCIndex}")
     public ResponseEntity<Transaction> update(@PathVariable String userId, @PathVariable int oldCIndex, 
                                     @PathVariable int oldTIndex, @PathVariable int newCIndex, @RequestBody Transaction txn) {
@@ -49,7 +58,7 @@ public class TransactionController {
     }
 
     @DeleteMapping("/delete/{userId}/{cIndex}/{tIndex}")
-    public ResponseEntity<Transaction> delete(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex){
+    public ResponseEntity<Transaction> delete(@PathVariable String userId, @PathVariable int cIndex, @PathVariable int tIndex) {
         
         Transaction deletedTxn = this.transactionService.delete(userId, cIndex, tIndex);
         return new ResponseEntity<Transaction>(deletedTxn, HttpStatus.OK);

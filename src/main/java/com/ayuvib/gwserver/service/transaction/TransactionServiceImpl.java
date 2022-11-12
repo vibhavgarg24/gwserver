@@ -1,10 +1,14 @@
 package com.ayuvib.gwserver.service.transaction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ayuvib.gwserver.dao.UserDao;
 import com.ayuvib.gwserver.exception.InvalidInputException;
+import com.ayuvib.gwserver.model.Category;
 import com.ayuvib.gwserver.model.Transaction;
 import com.ayuvib.gwserver.model.User;
 
@@ -31,6 +35,23 @@ public class TransactionServiceImpl implements TransactionService {
 
         this.userDao.save(user);
         return txn;
+    }
+
+    @Override
+    public List<Transaction> findAll(String id) {
+
+        User user = this.userDao.findById(id).get();
+        List<Transaction> list = new ArrayList<>();
+        
+        for (Category category: user.getCategories()) {
+            Category temp = new Category(category);
+            for (Transaction txn : category.getTxns()) {
+                txn.setCategory(temp);
+                list.add(txn);
+            }
+        }
+
+        return list;
     }
 
     @Override

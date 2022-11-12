@@ -18,6 +18,12 @@ public class Category {
         this.txns = new ArrayList<>();
     }
 
+    public Category(Category copy) {
+        this.name = copy.name;
+        this.sum = copy.sum;
+        this.setTxns(null);
+    }
+
     public String getName() {
         return name;
     }

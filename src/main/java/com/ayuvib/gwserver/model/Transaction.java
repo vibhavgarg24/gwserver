@@ -5,6 +5,7 @@ public class Transaction {
     private double amount;
     private long timestamp;
     private String label;
+    private Category category;
 
     public Transaction() {
     }
@@ -13,6 +14,14 @@ public class Transaction {
         this.amount = amount;
         this.timestamp = timestamp;
         this.label = label;
+        this.category = null;
+    }
+
+    public Transaction(double amount, long timestamp, String label, Category category) {
+        this.amount = amount;
+        this.timestamp = timestamp;
+        this.label = label;
+        this.category = category;
     }
 
     public double getAmount() {
@@ -39,9 +48,18 @@ public class Transaction {
         this.label = label;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
-        return "Transaction [amount=" + amount + ", timestamp=" + timestamp + ", label=" + label + "]";
+        return "Transaction [amount=" + amount + ", timestamp=" + timestamp + ", label=" + label + ", category="
+                + category + "]";
     }
-    
+
 }
