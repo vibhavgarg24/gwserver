@@ -76,5 +76,25 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryDao.deleteById(catId);
         return del;
     }
+
+    @Override
+    public Category reset(String catId) {
+
+        // delete all txns of this category
+        this.txnDao.deleteAllByCatId(catId);
+
+        Category reset = findById(catId);
+
+        // sub cat sum from user total
+        User user = this.userDao.findById(reset.getUserId()).get();
+        user.setTotalSum(user.getTotalSum() - reset.getSum());
+        this.userDao.save(user);
+
+        //category sum zero
+        reset.setSum(0);
+        Category save = this.categoryDao.save(reset);
+
+        return save;
+    }
     
 }

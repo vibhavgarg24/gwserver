@@ -15,4 +15,6 @@ public interface CategoryService {
     public Category update(Category category);
 
     public Category delete(String catId);
+
+    public Category reset(String catId);
 }

@@ -61,4 +61,11 @@ public class CategoryController {
         Category deletedCategory =  this.categoryService.delete(catId);
         return new ResponseEntity<Category>(deletedCategory, HttpStatus.OK);
     }
+
+    @DeleteMapping("reset/{catId}")
+    public ResponseEntity<Category> reset(@PathVariable String catId) {
+
+        Category resetCategory =  this.categoryService.reset(catId);
+        return new ResponseEntity<Category>(resetCategory, HttpStatus.OK);
+    }
 }
